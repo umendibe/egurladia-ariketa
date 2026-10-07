@@ -1,0 +1,18 @@
+.select2-container .select2-selection--single {
+  height: 34px !important;
+}
+
+.select2-container--default .select2-selection--single {
+  border: 1px solid #ccc !important;
+  border-radius: 0px !important;
+}
+
+.toki-iradokizunak {
+  left: 0;
+  max-height: 20rem;
+  overflow-y: auto;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+}
