@@ -3,54 +3,36 @@
 
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div class="position-relative">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <input
-                        class="form-control"
-                        type="search"
-                        placeholder="Bilatu herri edo hiri bat..."
-                        aria-label="Bilatu herri edo hiri bat"
-                        role="combobox"
-                        aria-autocomplete="list"
-                        aria-controls="toki-iradokizunak"
-                        [attr.aria-expanded]="!hautatutakoTokia && tokiak.length > 0"
-                        [value]="bilaketa"
-                        (input)="bilatuTokiak($event)"
-                    >
-                </div>
-                @if (!hautatutakoTokia && bilaketa.length >= 2) {
-                    <div id="toki-iradokizunak" class="list-group toki-iradokizunak" role="listbox">
-                        @if (bilatzen) {
-                            <div class="list-group-item" role="status">Bilatzen...</div>
-                        } @else if (errorea) {
-                            <div class="list-group-item text-danger" role="alert">{{ errorea }}</div>
-                        } @else if (tokiak.length === 0) {
-                            <div class="list-group-item">Ez da tokirik aurkitu.</div>
-                        } @else {
-                            @for (item of tokiak; track item.id) {
-                                <button
-                                    class="list-group-item list-group-item-action text-start"
-                                    type="button"
-                                    role="option"
-                                    (click)="aukeratuTokia(item)"
-                                >
-                                    {{ item.name }}{{ item.admin1 ? ', ' + item.admin1 : '' }} ({{ item.country }})
-                                </button>
-                            }
-                        }
-                    </div>
-                }
-            </div>
-            @if (hautatutakoTokia) {
-                <small class="d-block mt-2">Hautatutako tokia: {{ hautatutakoTokia.name }}, {{ hautatutakoTokia.country }}</small>
-            } @else if (bilaketa.length < 2) {
-                <small class="d-block mt-2">Idatzi gutxienez bi karaktere.</small>
-            }
+            <form class="input-group">
+                <span class="input-group-text"><i
+                        class="bi bi-search"></i></span>
+                <input
+                    class="form-control"
+                    type="search"
+                    name="bilaketa"
+                    placeholder="Bilatu herri edo hiri bat..."
+                    aria-label="Bilatu herri edo hiri bat"
+                    required
+                    value="{{ hiria }}">
+                <button class="btn btn-primary" type="submit"
+                    aria-label="Bilatu">
+                    <i class="bi bi-search">Bilatu</i>
+                </button>
+            </form>
         </div>
     </div>
 </header>
 
 <main class="container mt-4">
-    <app-card-nagusia-component></app-card-nagusia-component>
+
+    @if (location) {
+    <app-card-nagusia-component
+        [latitude]="getLatitude()" 
+        [longitude]="getLongitude()"  
+        [hiria]="hiria"> 
+    </app-card-nagusia-component> 
+    } @else {
+    <p>Kargatzen ...</p> 
+    }
+
 </main>

@@ -1,16 +1,6 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CardNagusiaComponent } from '../card-nagusia-component/card-nagusia-component';
-
-interface Toki {
-  id: number;
-  name: string;
-  country: string;
-  admin1?: string;
-}
-
-interface GeocodingResponse {
-  results?: Toki[];
-}
+import { ApiService } from '../services/api';
 
 @Component({
   imports: [CardNagusiaComponent],
@@ -18,72 +8,53 @@ interface GeocodingResponse {
   styleUrl: './eguraldia-component.css',
   templateUrl: './eguraldia-component.html',
 })
-export class EguraldiaComponent {
-  tokiak: Toki[] = [];
-  bilatzen = false;
-  bilaketa = '';
-  hautatutakoTokia: Toki | null = null;
-  errorea = '';
-  private searchTimer?: ReturnType<typeof setTimeout>;
-  private searchId = 0;
+export class EguraldiaComponent implements OnInit {
+  hiria: string = 'Madrid';
+  location: [number, number] | null = null;
 
-  constructor(private cdr: ChangeDetectorRef) {}
-
-  bilatuTokiak(event: Event) {
-    const query = (event.target as HTMLInputElement).value.trim();
-    this.bilaketa = query;
-    this.hautatutakoTokia = null;
-    const searchId = ++this.searchId;
-    clearTimeout(this.searchTimer);
-    this.tokiak = [];
-    this.errorea = '';
-    this.bilatzen = query.length >= 2;
-
-    if (query.length < 2) {
-      this.cdr.detectChanges();
-      return;
-    }
-
-    this.searchTimer = setTimeout(() => {
-      this.getTokiak(query, searchId);
-    }, 300);
+  private api: ApiService;
+  constructor(api: ApiService) {
+    this.api = api;
   }
 
-  aukeratuTokia(tokia: Toki) {
-    this.searchId++;
-    clearTimeout(this.searchTimer);
-    this.hautatutakoTokia = tokia;
-    this.bilaketa = `${tokia.name}, ${tokia.country}`;
-    this.tokiak = [];
-    this.bilatzen = false;
-    this.errorea = '';
-  }
-
-  private async getTokiak(query: string, searchId: number) {
-    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=100&language=eu&format=json`;
-    this.bilatzen = true;
-    this.cdr.detectChanges();
+  ngOnInit() {
     try {
-      const response = await fetch(url);
+      this.api.getLatLong(this.hiria).subscribe((data: any) => {
+        console.log(data);
 
-      if (!response.ok) {
-        throw new Error('No se pudieron cargar los sitios.');
-      }
+        this.api.getIragarpena(data.results[0].latitude, data.results[0].longitude).subscribe((data: any) => {
+          console.log(data);
 
-      const data: GeocodingResponse = await response.json();
-      if (searchId === this.searchId) {
-        this.tokiak = data.results ?? [];
-      }
+        });
+      });
+
+      //this.data = this.getIragarpena(this.latitude, this.longitude)
+
+      console.log('Latitude:', this.getLatitude());
+      console.log('Longitude:', this.getLongitude());
     } catch (error) {
-      if (searchId === this.searchId) {
-        this.errorea =
-          error instanceof Error ? error.message : 'Errore bat gertatu da.';
-      }
-    } finally {
-      if (searchId === this.searchId) {
-        this.bilatzen = false;
-        this.cdr.detectChanges();
-      }
+      console.error('Errorea:', error);
     }
+  }
+
+  public getLatitude(): number | null {
+    return this.location ? this.location[0] : null;
+  }
+
+  public getLongitude(): number | null {
+    return this.location ? this.location[1] : null;
+  }
+
+  private async getEguraldia(hiria: string): Promise<[number, number]> {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${hiria}&count=1&language=eu&format=json`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!response.ok || !data.results || data.results.length === 0) {
+      throw new Error(data.reason || 'Ez da aurkitu kokapenik.');
+    }
+
+    return [data.results[0].latitude, data.results[0].longitude];
   }
 }
