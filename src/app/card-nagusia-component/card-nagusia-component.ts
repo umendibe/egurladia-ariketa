@@ -16,21 +16,21 @@ export class CardNagusiaComponent implements OnInit {
   constructor(cdr: ChangeDetectorRef) {
     this.cdr = cdr;
   }
+
   ngOnInit(): void {
     console.log(this.eguraldia)
   }
 
   getWeatherIcon(code: number | undefined): string {
-  if (code === undefined) return './img/nublado';
+  if (code === undefined) return '/img/nublado.png';
   
-  // Mapeo básico de weather_code de Open-Meteo
-  if (code === 0) return './img/despejado'; // Despejado
-  if (code >= 1 && code <= 3) return './img/nublado'; // Nublado
-  if (code >= 45 && code <= 48) return './img/niebla'; // Niebla
-  if (code >= 51 && code <= 67) return './img/lluvia'; // Lluvia
-  if (code >= 71 && code <= 77) return './img/nieve'; // Nieve
-  if (code >= 95) return './img/tormenta'; // Tormenta
+  if (code === 0) return '/img/nubesyclaros.png';
+  if (code >= 1 && code <= 3) return '/img/nublado.png';
+  if (code >= 45 && code <= 48) return '/img/niebla.png';
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return '/img/lluvia.png';
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return '/img/nieve.png';
+  if (code >= 95) return '/img/tormenta.png';
   
-  return './img/nublado';
+  return '/img/nublado.png';
 }
 }

@@ -57,7 +57,7 @@ export class EguraldiaComponent {
 
     this.apiService.getIragarpena(this.latitud, this.longitud).subscribe({
       next: (res: any) => {
-        this.iragarpenaData = res;
+        this.iragarpenaData.set(res);
         this.cdr.detectChanges();
         this.cdr.detectChanges();
 

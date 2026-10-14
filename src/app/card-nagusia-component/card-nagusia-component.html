@@ -53,15 +53,13 @@
           <p class="card-date">{{ time }}</p>
         </div>
 
-        <div class="card-icon">
-          <i class="fa-solid fa-sun" style="color: #f59e0b;"></i>
+        <div class="card-temp-main">
+          <img [src]="getWeatherIcon(eguraldia?.daily?.weather_code?.[i])" />
         </div>
 
-        <div class="card-temp-main"><img [src]="getWeatherIcon(eguraldia?.daily?.weather_code?.[i])" alt="E" /></div>
-
         <div class="card-temp-range">
-          <span class="temp-max">{{ eguraldia?.daily?.temperature_2m_max?.[i] }}°</span>
-          <span class="temp-min">{{ eguraldia?.daily?.temperature_2m_min?.[i] }}°</span>
+          <span class="temp-max"><span class="temp-label">Máx</span> {{ eguraldia?.daily?.temperature_2m_max?.[i] }}°</span>
+          <span class="temp-min"><span class="temp-label">Mín</span> {{ eguraldia?.daily?.temperature_2m_min?.[i] }}°</span>
         </div>
       </div>
     }

@@ -9,7 +9,7 @@
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
   border-radius: 20px;
   margin: 30px auto 20px auto;
-  max-width: 720px;
+  max-width: 900px;
   width: 90%;
   padding: 25px 30px;
   color: white;  
@@ -111,7 +111,7 @@
    ========================================================= */
 .card-row-wrapper {
   width: 90%;
-  max-width: 720px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -121,7 +121,7 @@
   flex-wrap: nowrap;
   justify-content: center; /* Centra las cards horizontalmente */
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   overflow-x: auto;
   padding: 10px 0;
   scroll-behavior: smooth;
@@ -138,10 +138,10 @@
 /* Cards secundarias estilo iOS */
 .card {
   flex: 0 0 auto;
-  width: 105px;
-  height: 135px;
+  width: 150px;
+  height: 190px;
   box-sizing: border-box;
-  padding: 10px 8px;
+  padding: 14px 12px;
 
   background: rgba(25, 35, 50, 0.75);
   -webkit-backdrop-filter: blur(20px);
@@ -166,20 +166,25 @@
 }
 
 .card-date {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
 }
 
-.card-icon {
-  font-size: 1.4rem;
+.card-temp-main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
 }
 
-.card-temp-main {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #ffffff;
+.card-temp-main img {
+  display: block;
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
 }
 
 .card-temp-range {
@@ -187,10 +192,16 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 700;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 4px;
+  padding-top: 8px;
+}
+
+.temp-label {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.7rem;
+  font-weight: 500;
 }
 
 .temp-max {
