@@ -1,70 +1,69 @@
 <div class="container" id="wrapper">
-    <div class="container-fluid" id="current-weather">
-        <div class="row">
-
-            <!-- Right panel -->
-            <div class="col-md-4 col-sm-5">
-                <h5><span id="cityName">{{eguraldia?.current?.apparent_temperature}}</span> <span
-                        id="cityCode"></span></h5>
-                <h6 id="localDate">{{eguraldia?.daily?.time[0]}}</h6>
-                <h5 id="localTime"></h5>
-                <a id="refreshButton" href="#"><i class="fa fa-refresh fa-fw"
-                        aria-hidden="true"></i> Refresh</a>
-            </div>
-
-            <!-- Center panel -->
-            <div class="col-md-5 col-sm-7" style="margin: 10px auto;padding:0;">
-                <div class="row">
-                    <i class="wi" id="main-icon" style="font-size: 85px;"></i>
-                    <div>
-                        <span id="mainTemperature"></span>
-                        <p id="tempDescription"></p>
-                    </div>
-                    <p style="font-size: 1.5rem;"><a href="#" class="active"
-                            id="celcius">°C</a>
-                </div>
-            </div>
-
-            <!-- Left panel -->
-            <div class="col-xs-12 col-sm-12 col-md-3 row"
-                style="text-align: right;">
-                <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
-                    <h6>Humidity: <span id="humidity"></span>%</h6>
-                </div>
-                <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
-                    <h6>Wind: <span id="wind"></span> m/s</h6>
-                </div>
-                <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
-                    <h6>High: <span id="mainTempHot"></span>°</h6>
-                </div>
-                <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
-                    <h6>Low: <span id="mainTempLow"></span>°</h6>
-                </div>
-            </div>
-
-        </div>
+  <div id="current-weather">
+    
+    <!-- Panel Izquierdo: Información de la ciudad/fecha -->
+    <div class="weather-col left-panel">
+      <h3 class="city-title">{{eguraldia?.cityName}}</h3>
+      <div class="date-time-info">
+        <p class="local-date">{{eguraldia?.daily?.time?.[0]}}</p>
+        <p class="local-time">{{eguraldia?.current?.time}}</p>
+      </div>
+      <a id="refreshButton" href="#">
+        <i class="fa fa-refresh fa-fw" aria-hidden="true"></i> Eguneratu
+      </a>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="protocol-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <p>Due to weather api restrictions, data can only be shown
-                        via HTTP request.</p>
-                    <p>Sorry for the inconvenience.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
+    <!-- Panel Central: Temperatura Principal -->
+    <div class="weather-col center-panel">
+      <div class="temp-display">
+        <i class="wi wi-day-sunny main-icon"></i>
+        <span id="mainTemperature">{{eguraldia?.current?.apparent_temperature}}°C</span>
+      </div>
     </div>
 
+    <!-- Panel Derecho: Detalle lateral (Humedad, Viento, Máx, Mín) -->
+    <div class="weather-col right-panel">
+      <div class="side-item">
+        <span class="side-label">Humedad:</span>
+        <span class="side-value">{{eguraldia?.current?.relative_humidity_2m}}%</span>
+      </div>
+      <div class="side-item">
+        <span class="side-label">Viento:</span>
+        <span class="side-value">{{eguraldia?.current?.wind_speed_10m}} km/h</span>
+      </div>
+      <div class="side-item">
+        <span class="side-label">Máxima:</span>
+        <span class="side-value temp-max">{{eguraldia?.daily?.temperature_2m_max?.[0]}}°C</span>
+      </div>
+      <div class="side-item">
+        <span class="side-label">Mínima:</span>
+        <span class="side-value temp-min">{{eguraldia?.daily?.temperature_2m_min?.[0]}}°C</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Cards inferiores alineadas al centro del wrapper -->
+<div class="card-row-wrapper">
+  <div class="card-row">
+    @for (time of eguraldia?.daily?.time; track time; let i = $index) {
+      <div class="card">
+        <div class="card-header">
+          <p class="card-date">{{ time }}</p>
+        </div>
+
+        <div class="card-icon">
+          <i class="fa-solid fa-sun" style="color: #f59e0b;"></i>
+        </div>
+
+        <div class="card-temp-main"><img [src]="getWeatherIcon(eguraldia?.daily?.weather_code?.[i])" alt="E" /></div>
+
+        <div class="card-temp-range">
+          <span class="temp-max">{{ eguraldia?.daily?.temperature_2m_max?.[i] }}°</span>
+          <span class="temp-min">{{ eguraldia?.daily?.temperature_2m_min?.[i] }}°</span>
+        </div>
+      </div>
+    }
+  </div>
 </div>

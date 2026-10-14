@@ -1,79 +1,216 @@
-a {
-  color: white;
-  opacity: 0.6;
-  text-decoration: none;
-}
-
-a:hover, a:active, a:focus{
-  color: white;
-  text-decoration: none;
-  opacity: 1;
-}
-
-.active {
-  color: white;
-  text-decoration: none;
-  opacity: 1;
-}
-
-body{
-  background-color: #F4F6F7;
-}
-
+/* =========================================================
+   1. CARD PRINCIPAL (#wrapper) - FLEXBOX 3 COLUMNAS
+   ========================================================= */
 #wrapper {
-  background-color: #28688C;
-  box-shadow: 1px 5px 25px 3px #444;
-  border-radius: 10px;
-  margin: 100px auto;
+  background: rgba(40, 52, 70, 0.85);
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  margin: 30px auto 20px auto;
   max-width: 720px;
-  padding: 0px;
+  width: 90%;
+  padding: 25px 30px;
   color: white;  
+  box-sizing: border-box;
 }
 
-#current-weather{
-  padding: 15px;
+#current-weather {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
-#mainTemperature{
-  font-size: 5.5em; 
-  line-height: 0.7;
+/* Columnas internas */
+.weather-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-#tempDescription {
+.left-panel {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.center-panel {
+  align-items: center;
+  justify-content: center;
+}
+
+.right-panel {
+  align-items: flex-end;
+  text-align: right;
+  gap: 6px;
+}
+
+/* Estilos de la cabecera e información */
+.city-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #ffffff;
+}
+
+.date-time-info p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#refreshButton {
   margin-top: 10px;
-  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-.day-weather-box {
-  border: 1px solid #28688C;
-  background-color: #2E7FA1;
-  border-radius: 5px;
-  height: 5em;
+#refreshButton:hover {
+  color: #ffffff;
 }
 
-.day-weather-box p{
-  margin-bottom: 0;
+/* Temperatura central */
+.temp-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.side-weather-info {
-  padding: 0px 10px;
+.main-icon {
+  font-size: 3rem;
 }
 
-.day-weather-inner-box {
-  display: inline-flex;
-  margin: 14px auto;
-  padding: 0px 5px;
+#mainTemperature {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
-.forecast-main {
-  padding: 0px 0px 0px 30px;
+/* Detalles laterales (Derecha) */
+.side-item {
+  display: flex;
+  gap: 8px;
+  font-size: 0.85rem;
 }
 
-.forecast-icon {
-  font-size: 25px;
-  margin-left: 5px;
+.side-label {
+  color: rgba(255, 255, 255, 0.65);
 }
 
-.modal-body p{
-  color: #333;
+.side-value {
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   2. FILA DE CARDS CENTRADAS CON EL ANCHO DEL WRAPPER
+   ========================================================= */
+.card-row-wrapper {
+  width: 90%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.card-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center; /* Centra las cards horizontalmente */
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+}
+
+.card-row::-webkit-scrollbar {
+  height: 4px;
+}
+.card-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+/* Cards secundarias estilo iOS */
+.card {
+  flex: 0 0 auto;
+  width: 105px;
+  height: 135px;
+  box-sizing: border-box;
+  padding: 10px 8px;
+
+  background: rgba(25, 35, 50, 0.75);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  background: rgba(35, 48, 68, 0.85);
+}
+
+.card-date {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.card-icon {
+  font-size: 1.4rem;
+}
+
+.card-temp-main {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.card-temp-range {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 4px;
+}
+
+.temp-max {
+  color: #ff9f0a;
+}
+
+.temp-min {
+  color: #64d2ff;
+}
+
+@media (max-width: 600px) {
+  #current-weather {
+    flex-direction: column;
+    text-align: center;
+  }
+  .left-panel, .right-panel {
+    align-items: center;
+    text-align: center;
+  }
+  .card-row {
+    justify-content: flex-start;
+  }
 }
