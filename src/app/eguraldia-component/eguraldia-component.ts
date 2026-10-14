@@ -1,60 +1,71 @@
-import { Component, OnInit } from '@angular/core';
-import { CardNagusiaComponent } from '../card-nagusia-component/card-nagusia-component';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api';
+import { CardNagusiaComponent } from '../card-nagusia-component/card-nagusia-component';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
-  imports: [CardNagusiaComponent],
+  standalone: true,
+  imports: [FormsModule, CardNagusiaComponent],
   selector: 'app-eguraldia-component',
   styleUrl: './eguraldia-component.css',
   templateUrl: './eguraldia-component.html',
 })
-export class EguraldiaComponent implements OnInit {
-  hiria: string = 'Madrid';
-  location: [number, number] | null = null;
+export class EguraldiaComponent {
 
-  private api: ApiService;
-  constructor(api: ApiService) {
-    this.api = api;
+  hiria: string = "";
+  latitud: number | null = null;
+  longitud: number | null = null;
+  iragarpenaData = signal<any | null>(null);
+  hiriAukeratua: string = "";
+  cdr: any;
+  private notify: CardNagusiaComponent;
+
+  private apiService = inject(ApiService);
+  constructor(cdr: ChangeDetectorRef) {
+    this.cdr = cdr;
+    this.notify = new CardNagusiaComponent(this.cdr);
+
   }
 
-  ngOnInit() {
-    try {
-      this.api.getLatLong(this.hiria).subscribe((data: any) => {
-        console.log(data);
 
-        this.api.getIragarpena(data.results[0].latitude, data.results[0].longitude).subscribe((data: any) => {
-          console.log(data);
+  bilatu(): void {
+    if (!this.hiria.trim()) return;
 
-        });
-      });
+    this.apiService.getLatLong(this.hiria).subscribe({
+      next: (res: any) => {
+        if (res.results && res.results.length > 0) {
+          this.latitud = res.results[0].latitude;
+          this.longitud = res.results[0].longitude;
+          this.hiriAukeratua = res.results[0].name;
 
-      //this.data = this.getIragarpena(this.latitude, this.longitude)
-
-      console.log('Latitude:', this.getLatitude());
-      console.log('Longitude:', this.getLongitude());
-    } catch (error) {
-      console.error('Errorea:', error);
-    }
+          console.log("lat: " + this.latitud)
+          console.log("long: " + this.longitud)
+          this.lortuIragarpena();
+        } else {
+          console.warn('Ez da aurkitu.');
+        }
+      },
+      error: (err) => {
+        console.error('Errorea API deian:', err);
+      }
+    });
   }
 
-  public getLatitude(): number | null {
-    return this.location ? this.location[0] : null;
-  }
+  private lortuIragarpena(): void {
+    if (this.latitud === null || this.longitud === null) return;
 
-  public getLongitude(): number | null {
-    return this.location ? this.location[1] : null;
-  }
+    this.apiService.getIragarpena(this.latitud, this.longitud).subscribe({
+      next: (res: any) => {
+        this.iragarpenaData = res;
+        this.cdr.detectChanges();
+        this.cdr.detectChanges();
 
-  private async getEguraldia(hiria: string): Promise<[number, number]> {
-    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${hiria}&count=1&language=eu&format=json`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (!response.ok || !data.results || data.results.length === 0) {
-      throw new Error(data.reason || 'Ez da aurkitu kokapenik.');
-    }
-
-    return [data.results[0].latitude, data.results[0].longitude];
+        console.log('Iragarpenaren datuak:', this.iragarpenaData);
+      },
+      error: (err) => {
+        console.error('Errorea iragarpena lortzean:', err);
+      }
+    });
   }
 }

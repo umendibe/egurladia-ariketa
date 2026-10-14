@@ -4,9 +4,9 @@
 
             <!-- Right panel -->
             <div class="col-md-4 col-sm-5">
-                <h5><span id="cityName">{{hiria}}</span> <span
+                <h5><span id="cityName">{{eguraldia?.current?.apparent_temperature}}</span> <span
                         id="cityCode"></span></h5>
-                <h6 id="localDate"></h6>
+                <h6 id="localDate">{{eguraldia?.daily?.time[0]}}</h6>
                 <h5 id="localTime"></h5>
                 <a id="refreshButton" href="#"><i class="fa fa-refresh fa-fw"
                         aria-hidden="true"></i> Refresh</a>

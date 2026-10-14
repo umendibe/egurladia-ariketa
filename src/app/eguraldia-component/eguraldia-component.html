@@ -3,9 +3,10 @@
 
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <form class="input-group">
-                <span class="input-group-text"><i
-                        class="bi bi-search"></i></span>
+            <form class="input-group" (ngSubmit)="bilatu()">
+                <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                </span>
                 <input
                     class="form-control"
                     type="search"
@@ -13,10 +14,9 @@
                     placeholder="Bilatu herri edo hiri bat..."
                     aria-label="Bilatu herri edo hiri bat"
                     required
-                    value="{{ hiria }}">
-                <button class="btn btn-primary" type="submit"
-                    aria-label="Bilatu">
-                    <i class="bi bi-search">Bilatu</i>
+                    [(ngModel)]="hiria">
+                <button class="btn btn-primary" type="submit" aria-label="Bilatu">
+                    <i class="bi bi-search"> Bilatu</i>
                 </button>
             </form>
         </div>
@@ -24,15 +24,5 @@
 </header>
 
 <main class="container mt-4">
-
-    @if (location) {
-    <app-card-nagusia-component
-        [latitude]="getLatitude()" 
-        [longitude]="getLongitude()"  
-        [hiria]="hiria"> 
-    </app-card-nagusia-component> 
-    } @else {
-    <p>Kargatzen ...</p> 
-    }
-
+    <app-card-nagusia-component [eguraldia]="iragarpenaData"></app-card-nagusia-component>
 </main>
